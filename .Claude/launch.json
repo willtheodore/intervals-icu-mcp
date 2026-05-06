@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "MCP Inspector",
+      "runtimeExecutable": "/opt/homebrew/opt/node@22/bin/npx",
+      "runtimeArgs": [
+        "@modelcontextprotocol/inspector",
+        "/opt/homebrew/opt/node@22/bin/node",
+        "node_modules/.bin/tsx",
+        "src/index.ts"
+      ],
+      "port": 6274
+    }
+  ]
+}

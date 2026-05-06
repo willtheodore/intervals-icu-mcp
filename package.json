@@ -1,0 +1,28 @@
+{
+  "name": "intervals-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for the intervals.icu API",
+  "type": "module",
+  "main": "dist/index.js",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "dev": "/opt/homebrew/opt/node@22/bin/npx @modelcontextprotocol/inspector /opt/homebrew/opt/node@22/bin/node node_modules/.bin/tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "/opt/homebrew/opt/node@22/bin/node node_modules/.bin/vitest run",
+    "test:watch": "/opt/homebrew/opt/node@22/bin/node node_modules/.bin/vitest"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "axios": "^1.7.0",
+    "dotenv": "^16.4.0",
+    "form-data": "^4.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0"
+  }
+}
