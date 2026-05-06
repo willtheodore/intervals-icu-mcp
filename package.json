@@ -1,5 +1,5 @@
 {
-  "name": "intervals-mcp",
+  "name": "intervals-icu-mcp",
   "version": "0.1.0",
   "description": "MCP server for the intervals.icu API",
   "type": "module",
