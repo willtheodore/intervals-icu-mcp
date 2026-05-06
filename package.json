@@ -6,11 +6,11 @@
   "main": "dist/index.js",
   "engines": { "node": ">=18" },
   "scripts": {
-    "dev": "/opt/homebrew/opt/node@22/bin/npx @modelcontextprotocol/inspector /opt/homebrew/opt/node@22/bin/node node_modules/.bin/tsx src/index.ts",
+    "dev": "npx @modelcontextprotocol/inspector tsx src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "/opt/homebrew/opt/node@22/bin/node node_modules/.bin/vitest run",
-    "test:watch": "/opt/homebrew/opt/node@22/bin/node node_modules/.bin/vitest"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
