@@ -19,6 +19,16 @@ Connect Claude to your [Intervals.icu](https://intervals.icu) training data. Ask
 - **Node.js 18 or later** — [download at nodejs.org](https://nodejs.org/en/download)
 - An **[Intervals.icu](https://intervals.icu)** account
 
+### 1. Get the code
+
+**With Git:**
+```bash
+git clone https://github.com/willtheodore/intervals-icu-mcp.git
+cd intervals-icu-mcp
+```
+
+**Without Git:** click **Code → Download ZIP** at the top of this page, unzip it, then open a terminal and `cd` into the unzipped folder.
+
 ### Option A: Guided setup (recommended)
 
 Run these three commands from your terminal. They install dependencies, build the server, and launch an interactive setup wizard:
@@ -33,18 +43,18 @@ The wizard will ask for your API key, write your `.env` file, and offer to updat
 
 ### Option B: Manual setup
 
-**1. Get your API key**
+**2. Get your API key**
 
 Log into Intervals.icu, go to **Settings → Developer Settings**, and copy your API key.
 
-**2. Install dependencies and build**
+**3. Install dependencies and build**
 
 ```bash
 npm install
 npm run build
 ```
 
-**3. Create a `.env` file**
+**4. Create a `.env` file**
 
 Copy the example and fill in your details:
 
@@ -59,7 +69,7 @@ INTERVALS_API_KEY=your_api_key_here
 INTERVALS_ATHLETE_ID=0   # Leave as 0 to use your own account
 ```
 
-**4. Add to Claude Desktop**
+**5. Add to Claude Desktop**
 
 Find your Claude Desktop config file:
 
@@ -88,7 +98,7 @@ Open it and add the `intervals` entry under `mcpServers` (replace the path with 
 > - `args` — the path to the built server file (update this to match your actual path)
 > - `env` — environment variables passed to the server; put your API key here
 
-**5. Restart Claude Desktop**
+**6. Restart Claude Desktop**
 
 Close and reopen Claude Desktop. The Intervals tools will be available in any new conversation.
 
