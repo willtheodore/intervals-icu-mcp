@@ -6,6 +6,7 @@ import { registerActivityTools } from "./tools/activities.js";
 import { registerCalendarTools } from "./tools/calendar.js";
 import { registerWorkoutTools } from "./tools/workouts.js";
 import { registerFitnessTools } from "./tools/fitness.js";
+import { registerCurveTools } from "./tools/curves.js";
 
 const server = new McpServer({
   name: "intervals-mcp",
@@ -17,6 +18,7 @@ registerActivityTools(server);
 registerCalendarTools(server);
 registerWorkoutTools(server);
 registerFitnessTools(server);
+registerCurveTools(server);
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
