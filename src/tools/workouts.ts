@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { post, put, athleteId } from "../client.js";
+import { post, put, athleteId, withErrorHandling } from "../client.js";
+import { jsonResult } from "../utils.js";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
 const WORKOUT_TARGETS = ["AUTO", "POWER", "HR", "PACE"] as const;
@@ -24,9 +25,7 @@ export async function createWorkout(params: {
   if (params.folderId !== undefined) body.folder_id = params.folderId;
 
   const data = await post(`/athlete/${athleteId()}/workouts`, body);
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export async function updateWorkout(params: {
@@ -49,9 +48,7 @@ export async function updateWorkout(params: {
   if (params.folderId !== undefined) body.folder_id = params.folderId;
 
   const data = await put(`/athlete/${athleteId()}/workouts/${params.workoutId}`, body);
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export function registerWorkoutTools(server: McpServer) {
@@ -72,7 +69,7 @@ export function registerWorkoutTools(server: McpServer) {
         folderId: z.number().int().optional().describe("Workout library folder ID."),
       },
     },
-    createWorkout
+    withErrorHandling(createWorkout)
   );
 
   server.registerTool(
@@ -90,6 +87,6 @@ export function registerWorkoutTools(server: McpServer) {
         folderId: z.number().int().optional().describe("New workout library folder ID."),
       },
     },
-    updateWorkout
+    withErrorHandling(updateWorkout)
   );
 }

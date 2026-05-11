@@ -1,10 +1,7 @@
 import { z } from "zod";
-import { get, athleteId } from "../client.js";
+import { get, athleteId, withErrorHandling } from "../client.js";
+import { isoDate, jsonResult } from "../utils.js";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-
-function isoDate(d: Date) {
-  return d.toISOString().slice(0, 10);
-}
 
 export async function getFitnessSummary(params: {
   oldest?: string;
@@ -20,9 +17,7 @@ export async function getFitnessSummary(params: {
     oldest: params.oldest ?? isoDate(threeMonthsAgo),
     newest: params.newest ?? isoDate(threeMonthsAhead),
   });
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export function registerFitnessTools(server: McpServer) {
@@ -42,6 +37,6 @@ export function registerFitnessTools(server: McpServer) {
           .describe("End date (YYYY-MM-DD). Defaults to 3 months from today."),
       },
     },
-    getFitnessSummary
+    withErrorHandling(getFitnessSummary)
   );
 }
