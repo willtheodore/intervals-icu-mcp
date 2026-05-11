@@ -30,6 +30,13 @@ An MCP server that connects Claude to the [Intervals.icu](https://intervals.icu)
 | `create_workout` | Create a workout in the library |
 | `update_workout` | Edit an existing library workout |
 
+### Performance Curves
+| Tool | Description |
+|---|---|
+| `get_power_curves` | Power-duration curve (MMP) for a date range and sport type |
+| `get_hr_curves` | HR-duration curve for a date range and sport type |
+| `get_pace_curves` | Pace-duration curve for a date range and sport type |
+
 ### Fitness & Wellness
 | Tool | Description |
 |---|---|
