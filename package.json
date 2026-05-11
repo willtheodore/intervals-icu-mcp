@@ -9,6 +9,7 @@
     "dev": "npx @modelcontextprotocol/inspector tsx src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "setup": "tsx src/setup.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

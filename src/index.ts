@@ -7,6 +7,10 @@ import { registerCalendarTools } from "./tools/calendar.js";
 import { registerWorkoutTools } from "./tools/workouts.js";
 import { registerFitnessTools } from "./tools/fitness.js";
 import { registerCurveTools } from "./tools/curves.js";
+import { validateEnv, athleteIdMismatchCheck } from "./startup.js";
+
+validateEnv();
+await athleteIdMismatchCheck();
 
 const server = new McpServer({
   name: "intervals-mcp",

@@ -1,10 +1,7 @@
 import { z } from "zod";
-import { get, post, put, athleteId } from "../client.js";
+import { get, post, put, athleteId, withErrorHandling } from "../client.js";
+import { isoDate, jsonResult } from "../utils.js";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-
-function isoDate(d: Date) {
-  return d.toISOString().slice(0, 10);
-}
 
 const EVENT_CATEGORIES = [
   "WORKOUT",
@@ -22,9 +19,7 @@ export async function listEvents(params: { oldest: string; newest: string }) {
     oldest: params.oldest,
     newest: params.newest,
   });
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export async function createEvent(params: {
@@ -49,9 +44,7 @@ export async function createEvent(params: {
   if (params.distance !== undefined) body.distance = params.distance;
 
   const data = await post(`/athlete/${athleteId()}/events`, body);
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export async function updateEvent(params: {
@@ -76,9 +69,7 @@ export async function updateEvent(params: {
   if (params.indoor !== undefined) body.indoor = params.indoor;
 
   const data = await put(`/athlete/${athleteId()}/events/${params.eventId}`, body);
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export function registerCalendarTools(server: McpServer) {
@@ -91,7 +82,7 @@ export function registerCalendarTools(server: McpServer) {
         newest: z.string().describe("End date (YYYY-MM-DD)."),
       },
     },
-    listEvents
+    withErrorHandling(listEvents)
   );
 
   server.registerTool(
@@ -112,7 +103,7 @@ export function registerCalendarTools(server: McpServer) {
         indoor: z.boolean().default(false).describe("Whether the workout is indoors."),
       },
     },
-    createEvent
+    withErrorHandling(createEvent)
   );
 
   server.registerTool(
@@ -131,6 +122,6 @@ export function registerCalendarTools(server: McpServer) {
         indoor: z.boolean().optional().describe("Whether the workout is indoors."),
       },
     },
-    updateEvent
+    withErrorHandling(updateEvent)
   );
 }

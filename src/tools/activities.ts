@@ -1,10 +1,7 @@
 import { z } from "zod";
-import { get, put, postFile, athleteId } from "../client.js";
+import { get, put, postFile, athleteId, withErrorHandling } from "../client.js";
+import { isoDate, jsonResult } from "../utils.js";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-
-function isoDate(d: Date) {
-  return d.toISOString().slice(0, 10);
-}
 
 export async function listActivities(params: {
   oldest?: string;
@@ -20,16 +17,12 @@ export async function listActivities(params: {
     newest: params.newest ?? isoDate(today),
     limit: params.limit ?? 20,
   });
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export async function getActivity(params: { activityId: string }) {
   const data = await get(`/activity/${params.activityId}`);
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export async function createActivity(params: {
@@ -46,9 +39,7 @@ export async function createActivity(params: {
   if (params.type) fields.type = params.type;
 
   const data = await postFile(`/athlete/${athleteId()}/activities`, params.filePath, fields);
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export async function updateActivity(params: {
@@ -65,9 +56,7 @@ export async function updateActivity(params: {
   if (params.startDateLocal) body.start_date_local = params.startDateLocal;
 
   const data = await put(`/activity/${params.activityId}`, body);
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export function registerActivityTools(server: McpServer) {
@@ -81,7 +70,7 @@ export function registerActivityTools(server: McpServer) {
         limit: z.number().int().min(1).max(200).default(20).describe("Max number of activities to return."),
       },
     },
-    listActivities
+    withErrorHandling(listActivities)
   );
 
   server.registerTool(
@@ -92,7 +81,7 @@ export function registerActivityTools(server: McpServer) {
         activityId: z.string().describe("The activity ID (e.g. from list_activities)."),
       },
     },
-    getActivity
+    withErrorHandling(getActivity)
   );
 
   server.registerTool(
@@ -107,7 +96,7 @@ export function registerActivityTools(server: McpServer) {
         type: z.string().optional().describe("Activity type (e.g. Ride, Run, Swim)."),
       },
     },
-    createActivity
+    withErrorHandling(createActivity)
   );
 
   server.registerTool(
@@ -122,6 +111,6 @@ export function registerActivityTools(server: McpServer) {
         startDateLocal: z.string().optional().describe("New start date/time in local time (ISO 8601)."),
       },
     },
-    updateActivity
+    withErrorHandling(updateActivity)
   );
 }

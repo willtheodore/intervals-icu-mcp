@@ -1,11 +1,10 @@
-import { get, athleteId } from "../client.js";
+import { get, athleteId, withErrorHandling } from "../client.js";
+import { jsonResult } from "../utils.js";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
 export async function getAthlete() {
   const data = await get(`/athlete/${athleteId()}`);
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export function registerAthleteTools(server: McpServer) {
@@ -14,6 +13,6 @@ export function registerAthleteTools(server: McpServer) {
     {
       description: "Get the athlete profile including name, sport settings, and power/HR zones",
     },
-    getAthlete
+    withErrorHandling(getAthlete)
   );
 }

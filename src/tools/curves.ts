@@ -1,10 +1,7 @@
 import { z } from "zod";
-import { get, athleteId } from "../client.js";
+import { get, athleteId, withErrorHandling } from "../client.js";
+import { isoDate, jsonResult } from "../utils.js";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-
-function isoDate(d: Date) {
-  return d.toISOString().slice(0, 10);
-}
 
 function defaultDates() {
   const today = new Date();
@@ -32,9 +29,7 @@ export async function getPowerCurves(params: {
   if (params.type !== undefined) query.type = params.type;
 
   const data = await get(`/athlete/${athleteId()}/power-curves`, query);
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export async function getHrCurves(params: {
@@ -50,9 +45,7 @@ export async function getHrCurves(params: {
   if (params.type !== undefined) query.type = params.type;
 
   const data = await get(`/athlete/${athleteId()}/hr-curves`, query);
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export async function getPaceCurves(params: {
@@ -68,9 +61,7 @@ export async function getPaceCurves(params: {
   if (params.type !== undefined) query.type = params.type;
 
   const data = await get(`/athlete/${athleteId()}/pace-curves`, query);
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
-  };
+  return jsonResult(data);
 }
 
 export function registerCurveTools(server: McpServer) {
@@ -81,7 +72,7 @@ export function registerCurveTools(server: McpServer) {
         "Get the power-duration curve (MMP) for the athlete. Returns best average power in watts for each duration across activities in the date range.",
       inputSchema: curveInputSchema,
     },
-    getPowerCurves
+    withErrorHandling(getPowerCurves)
   );
 
   server.registerTool(
@@ -91,7 +82,7 @@ export function registerCurveTools(server: McpServer) {
         "Get the heart rate-duration curve for the athlete. Returns best average HR in bpm for each duration across activities in the date range.",
       inputSchema: curveInputSchema,
     },
-    getHrCurves
+    withErrorHandling(getHrCurves)
   );
 
   server.registerTool(
@@ -101,6 +92,6 @@ export function registerCurveTools(server: McpServer) {
         "Get the pace-duration curve for the athlete. Returns best average pace for each duration across activities in the date range.",
       inputSchema: curveInputSchema,
     },
-    getPaceCurves
+    withErrorHandling(getPaceCurves)
   );
 }
