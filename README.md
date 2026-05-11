@@ -30,6 +30,11 @@ An MCP server that connects Claude to the [Intervals.icu](https://intervals.icu)
 | `create_workout` | Create a workout in the library |
 | `update_workout` | Edit an existing library workout |
 
+### Fitness & Wellness
+| Tool | Description |
+|---|---|
+| `get_fitness_summary` | Daily CTL (fitness), ATL (fatigue), TSB (form), and ramp rate over a date range. Defaults to 3 months ago → 3 months ahead |
+
 ## Setup
 
 ### 1. Get your API key
